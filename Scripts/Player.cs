@@ -19,7 +19,7 @@ public partial class Player : CharacterBody2D
         Down,
     }
 
-    private int _speed = 100;
+    private int _speed = 128;
 
     /*  private bool _idle,
          _walk;
@@ -107,7 +107,7 @@ public partial class Player : CharacterBody2D
     {
         base._PhysicsProcess(delta);
 
-        var velocity = Velocity;
+        Vector2 direction = Vector2.Zero;
 
         if (Input.IsActionPressed("ui_right"))
         {
@@ -115,12 +115,12 @@ public partial class Player : CharacterBody2D
             if (Input.IsActionPressed("Run"))
             {
                 _state = State.Running;
-                velocity.X = _speed + 120;
+                direction.X = 3;
             }
             else
             {
                 _state = State.Walk;
-                velocity.X = _speed;
+                direction.X = 1;
             }
         }
         else if (Input.IsActionPressed("ui_left"))
@@ -129,12 +129,12 @@ public partial class Player : CharacterBody2D
             if (Input.IsActionPressed("Run"))
             {
                 _state = State.Running;
-                velocity.X = -_speed - 120;
+                direction.X = -3;
             }
             else
             {
                 _state = State.Walk;
-                velocity.X = -_speed;
+                direction.X = -1;
             }
         }
         else if (Input.IsActionPressed("ui_down"))
@@ -142,12 +142,12 @@ public partial class Player : CharacterBody2D
             _direction = Direction.Down;
             if (Input.IsActionPressed("Run"))
             {
-                velocity.Y = _speed + 120;
+                direction.Y = 3;
                 _state = State.Running;
             }
             else
             {
-                velocity.Y = _speed;
+                direction.Y = 1;
                 _state = State.Walk;
             }
         }
@@ -157,22 +157,22 @@ public partial class Player : CharacterBody2D
             if (Input.IsActionPressed("Run"))
             {
                 _state = State.Running;
-                velocity.Y = -_speed - 120;
+                direction.Y = -3;
             }
             else
             {
-                velocity.Y = -_speed;
+                direction.Y = -1;
                 _state = State.Walk;
             }
         }
         else
         {
-            velocity.X = Mathf.MoveToward(velocity.X, 0, _speed);
-            velocity.Y = Mathf.MoveToward(velocity.Y, 0, _speed);
+            direction = Vector2.Zero;
             _state = State.Idle;
         }
 
-        Velocity = velocity;
+        Velocity = direction * _speed;
+        GD.Print(Velocity);
         MoveAndSlide();
     }
 }
