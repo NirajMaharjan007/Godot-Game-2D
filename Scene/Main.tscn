@@ -13,4 +13,4 @@ script = ExtResource("1_xhtwi")
 position = Vector2(459, 463)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
-position = Vector2(-2, 6)
+position_smoothing_speed = 8.0
