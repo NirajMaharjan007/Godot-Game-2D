@@ -24,7 +24,6 @@ limit_left = 0
 limit_top = 30
 limit_right = 1650
 limit_bottom = 930
-limit_smoothed = true
 position_smoothing_speed = 8.0
 
 [node name="Node2D" type="Node2D" parent="."]
