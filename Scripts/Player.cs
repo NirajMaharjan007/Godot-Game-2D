@@ -1,25 +1,9 @@
-using System;
 using Godot;
+using Misc;
 
 public partial class Player : CharacterBody2D
 {
-    public enum State
-    {
-        Idle,
-        Running,
-        Walk,
-        Attacking,
-    }
-
-    public enum Direction
-    {
-        Left,
-        Right,
-        Up,
-        Down,
-    }
-
-    private int _speed = 128;
+    private const int SPEED = 128;
 
     private Area2D _area2D;
     private CollisionShape2D _collisionShape2D;
@@ -201,7 +185,7 @@ public partial class Player : CharacterBody2D
             _state = State.Idle;
         }
 
-        Velocity = direction * _speed;
+        Velocity = direction * SPEED;
         GD.Print(Velocity);
         MoveAndSlide();
     }
