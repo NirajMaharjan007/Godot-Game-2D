@@ -830,9 +830,9 @@ script = ExtResource("1_jvxg0")
 
 [node name="AnimatedCharacter2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ds1xm")
-animation = &"right_idle"
+animation = &"right_attack"
 autoplay = "down_idle"
-frame_progress = 0.554003
+frame_progress = 0.576433
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
