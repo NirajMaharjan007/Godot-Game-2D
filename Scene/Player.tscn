@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://byqxfwoww0mts" path="res://assests/resources/Character/PNG/Orc1/Orc1_attack/orc1_attack_full.png" id="2_fvocf"]
 [ext_resource type="Texture2D" uid="uid://cgihmc7rwk5f1" path="res://assests/resources/Character/PNG/Orc1/Orc1_run/orc1_run_full.png" id="3_mud5u"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fvocf"]
+size = Vector2(18, 23.3125)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_eplha"]
 atlas = ExtResource("2_fvocf")
 region = Rect2(0, 0, 64, 64)
@@ -821,14 +824,19 @@ animations = [{
 radius = 7.0
 height = 28.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fvocf"]
-size = Vector2(18, 23.3125)
-
 [node name="CharacterBody2D" type="CharacterBody2D"]
 up_direction = Vector2(0, 1)
 script = ExtResource("1_jvxg0")
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(24, 0)
+shape = SubResource("RectangleShape2D_fvocf")
+debug_color = Color(0.854902, 0.670588, 0.964706, 0.294118)
+
 [node name="AnimatedCharacter2D" type="AnimatedSprite2D" parent="."]
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ds1xm")
 animation = &"right_attack"
 autoplay = "down_idle"
@@ -837,10 +845,3 @@ frame_progress = 0.576433
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_3eeal")
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(24, 0)
-shape = SubResource("RectangleShape2D_fvocf")
-debug_color = Color(0.854902, 0.670588, 0.964706, 0.294118)
