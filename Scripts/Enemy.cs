@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Godot;
 using Misc;
 
@@ -11,12 +11,22 @@ public partial class Enemy : CharacterBody2D
 
     private AnimatedSprite2D spirte;
 
+    private Timer _timer;
+
     // private CollisionShape2D _collisionShape2D;
 
     // public Vector2 HitBox
     // {
     //     get => _collisionShape2D.Position;
     // }
+    // Pre-calculate direction vectors to avoid recreation each frame
+    private static readonly Dictionary<Direction, Vector2> _directionVectors = new()
+    {
+        { Direction.Left, Vector2.Left },
+        { Direction.Right, Vector2.Right },
+        { Direction.Up, Vector2.Up },
+        { Direction.Down, Vector2.Down },
+    };
 
     public override void _Ready()
     {
@@ -24,6 +34,10 @@ public partial class Enemy : CharacterBody2D
 
         spirte = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         // _collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
+
+        _timer = GetNode<Timer>("DirectionTimer");
+        _timer.Timeout += PickRandomDirection;
+        _timer.Start();
     }
 
     public override void _Process(double delta)
@@ -79,37 +93,53 @@ public partial class Enemy : CharacterBody2D
         }
         GD.Print("Enemy->" + anim);
         spirte.Play(anim);
-
-        DirectionFlow();
     }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
 
-        if (Velocity.IsZeroApprox())
+        Vector2 velocity = _directionVectors.GetValueOrDefault(_direction, Vector2.Zero);
+
+        _state = velocity.IsZeroApprox() ? State.Idle : State.Walk;
+
+        /* if (velocity.IsZeroApprox())
             _state = State.Idle;
         else
         {
             _state = State.Walk;
-            if (Velocity.X > 0)
+            if (velocity.X > 0)
                 _direction = Direction.Right;
-            else if (Velocity.X < 0)
+            else if (velocity.X < 0)
                 _direction = Direction.Left;
-            else if (Velocity.Y > 0)
+            else if (velocity.Y > 0)
                 _direction = Direction.Down;
-            else if (Velocity.Y < 0)
+            else if (velocity.Y < 0)
                 _direction = Direction.Up;
-        }
+        } */
+
+        Velocity = velocity * SPEED;
+        MoveAndSlide();
 
         GD.Print(_state.ToString() + "\t" + _direction.ToString());
-        MoveAndSlide();
     }
 
-    private void DirectionFlow()
+    private void PickRandomDirection()
     {
-        Vector2 direction = Vector2.Zero;
-        int x = GD.RandRange(-1, 1);
-        int y = GD.RandRange(-1, 1);
+        // Use a single random call for both direction and idle chance
+        float randomValue = GD.Randf();
+
+        // 20% chance to be idle
+        if (randomValue < 0.2f)
+        {
+            _direction = Direction.Down; // Better to use explicit None than -1
+            return;
+        }
+
+        // Map the remaining 80% to 4 directions (20% each)
+        // Using array lookup is faster than switch for small enums
+        Direction[] directions = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
+
+        _direction = directions[(int)((randomValue - 0.2f) * 5)]; // Scale to 0-3 index
     }
 }

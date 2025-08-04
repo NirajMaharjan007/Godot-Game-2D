@@ -337,6 +337,11 @@ height = 34.0
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_h0dic")
 
+[node name="DirectionTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 5.0
+autostart = true
+
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="Detection" type="CollisionShape2D" parent="Area2D"]

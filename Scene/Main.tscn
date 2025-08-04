@@ -22,7 +22,7 @@ position = Vector2(579, 342)
 up_direction = Vector2(0, 1)
 
 [node name="Player" parent="." instance=ExtResource("3_djkur")]
-position = Vector2(580, 399)
+position = Vector2(600, 600)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 ignore_rotation = false
