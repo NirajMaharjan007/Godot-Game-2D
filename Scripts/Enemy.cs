@@ -42,10 +42,35 @@ public partial class Enemy : CharacterBody2D
         spirte = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
         _area2D = GetNode<Area2D>("Area2D");
+        _area2D.BodyEntered += OnBodyEntered;
+        _area2D.Monitorable = true;
+        _area2D.Monitoring = true;
 
         _timer = GetNode<Timer>("DirectionTimer");
         _timer.Timeout += PickRandomDirection;
         _timer.Start();
+    }
+
+    private void OnBodyEntered(Node2D body)
+    {
+        GD.Print(
+            "Body Name -> "
+                + body.Name
+                + " ->"
+                + body.Name.ToString().Equals("Wall")
+                + body.Name.ToString().Equals("Wall2")
+        );
+
+        if (body.Name.ToString().Equals("Wall") || body.Name.ToString().Equals("Wall2"))
+        {
+            // Get current direction safely
+            var currentDir = _direction;
+
+            // Get opposite direction
+            Direction oppositeDir = GetOppositeDirection(currentDir);
+            _direction = oppositeDir;
+            GD.Print(_direction);
+        }
     }
 
     public override void _Process(double delta)
@@ -132,53 +157,35 @@ public partial class Enemy : CharacterBody2D
         // GD.Print(_state.ToString() + "\t" + _direction.ToString());
     }
 
-    internal Direction GetOppositeDirection(Direction dir)
+    private Direction GetOppositeDirection(Direction dir)
     {
         return dir switch
         {
-            Direction.Up => Direction.Down,
-            Direction.Down => Direction.Up,
             Direction.Left => Direction.Right,
             Direction.Right => Direction.Left,
-            _ => Direction.Down,
+            Direction.Up => Direction.Down,
+            Direction.Down => Direction.Up,
+            _ => dir, // fallback in case of unknown value
         };
     }
 
-    internal void PickNewValidDirection(Direction invalidDirection)
+    private void PickRandomDirection()
     {
-        // Get all possible directions except the invalid one
-        var validDirections = new List<Direction>
-        {
-            Direction.Up,
-            Direction.Down,
-            Direction.Left,
-            Direction.Right,
-        }
-            .Where(d => d != invalidDirection)
-            .ToArray();
-
-        // Pick random valid direction
-        _direction = validDirections[GD.Randi() % validDirections.Length];
-
-        GD.Print("New direction: " + _direction);
-    }
-
-    internal void PickRandomDirection()
-    {
-        // Use a single random call for both direction and idle chance
-        float randomValue = GD.Randf();
-
-        // 20% chance to be idle
-        if (randomValue < 0.2f)
-        {
-            _direction = Direction.Down; // Better to use explicit None than -1
-            return;
-        }
-
-        // Map the remaining 80% to 4 directions (20% each)
         // Using array lookup is faster than switch for small enums
         Direction[] directions = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
 
         _direction = directions[GD.Randi() % directions.Length];
+    }
+
+    public override void _ExitTree()
+    {
+        if (_area2D != null)
+        {
+            _area2D.BodyEntered -= OnBodyEntered;
+        }
+        if (_timer != null)
+        {
+            _timer.Timeout -= PickRandomDirection;
+        }
     }
 }
