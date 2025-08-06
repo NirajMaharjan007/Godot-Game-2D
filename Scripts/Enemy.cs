@@ -14,8 +14,10 @@ public partial class Enemy : CharacterBody2D
     private Area2D _area2D;
     private AnimatedSprite2D spirte;
 
-    private Timer _timer;
+    private Timer _timer,
+        _idleTimer;
 
+    private bool _idle = false;
     public Area2D Detection
     {
         get => _area2D;
@@ -49,6 +51,16 @@ public partial class Enemy : CharacterBody2D
         _timer = GetNode<Timer>("DirectionTimer");
         _timer.Timeout += PickRandomDirection;
         _timer.Start();
+
+        _idleTimer = new();
+        AddChild(_idleTimer);
+        _idleTimer.WaitTime = 1.0f; // Idle duration
+        _idleTimer.OneShot = true;
+        _idleTimer.Timeout += () =>
+        {
+            PickRandomDirection();
+            _idle = false;
+        };
     }
 
     private void OnBodyEntered(Node2D body)
@@ -124,7 +136,7 @@ public partial class Enemy : CharacterBody2D
                     anim = "right_attack";
                 break;
         }
-        // GD.Print("Enemy->" + anim);
+        GD.Print("Enemy->" + _idle);
         spirte.Play(anim);
     }
 
@@ -133,8 +145,6 @@ public partial class Enemy : CharacterBody2D
         base._PhysicsProcess(delta);
 
         Vector2 velocity = _directionVectors.GetValueOrDefault(_direction, Vector2.Zero);
-
-        _state = velocity.IsZeroApprox() ? State.Idle : State.Walk;
 
         /* if (velocity.IsZeroApprox())
             _state = State.Idle;
@@ -150,9 +160,17 @@ public partial class Enemy : CharacterBody2D
             else if (velocity.Y < 0)
                 _direction = Direction.Up;
         } */
-
-        Velocity = velocity * SPEED;
-        MoveAndSlide();
+        if (_idle)
+        {
+            Velocity = Vector2.Zero;
+            _state = State.Idle;
+        }
+        else
+        {
+            _state = State.Walk;
+            Velocity = velocity * SPEED;
+            MoveAndSlide();
+        }
 
         // GD.Print(_state.ToString() + "\t" + _direction.ToString());
     }
@@ -171,9 +189,10 @@ public partial class Enemy : CharacterBody2D
 
     private void PickRandomDirection()
     {
-        // Using array lookup is faster than switch for small enums
-        Direction[] directions = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
+        _idle = true;
+        _idleTimer.Start();
 
+        Direction[] directions = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
         _direction = directions[GD.Randi() % directions.Length];
     }
 
