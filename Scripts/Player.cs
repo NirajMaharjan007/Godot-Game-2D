@@ -103,7 +103,7 @@ public partial class Player : CharacterBody2D
                     anim = "right_attack";
                 break;
         }
-        GD.Print(anim);
+        // GD.Print(anim);
         spirte.Play(anim);
     }
 
@@ -186,7 +186,7 @@ public partial class Player : CharacterBody2D
         }
 
         Velocity = direction * SPEED;
-        GD.Print(Velocity);
+        // GD.Print(Velocity);
         MoveAndSlide();
     }
 }
