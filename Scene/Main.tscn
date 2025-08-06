@@ -34,21 +34,21 @@ position_smoothing_speed = 8.0
 
 [node name="Node2D" type="Node2D" parent="."]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Node2D"]
+[node name="Wall" type="StaticBody2D" parent="Node2D"]
 position = Vector2(-4, 5)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/StaticBody2D"]
+[node name="West" type="CollisionShape2D" parent="Node2D/Wall"]
 position = Vector2(5, 477)
 shape = SubResource("RectangleShape2D_djkur")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Node2D/StaticBody2D"]
+[node name="East" type="CollisionShape2D" parent="Node2D/Wall"]
 position = Vector2(1649, 471)
 shape = SubResource("RectangleShape2D_djkur")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Node2D/StaticBody2D"]
+[node name="North" type="CollisionShape2D" parent="Node2D/Wall"]
 position = Vector2(834, 14)
 shape = SubResource("RectangleShape2D_h175a")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Node2D/StaticBody2D"]
+[node name="South" type="CollisionShape2D" parent="Node2D/Wall"]
 position = Vector2(841, 935)
 shape = SubResource("RectangleShape2D_h175a")

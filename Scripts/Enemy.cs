@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using Misc;
@@ -9,16 +10,16 @@ public partial class Enemy : CharacterBody2D
     private State _state = State.Idle;
     private Direction _direction = Direction.Down;
 
+    private Area2D _area2D;
     private AnimatedSprite2D spirte;
 
     private Timer _timer;
 
-    // private CollisionShape2D _collisionShape2D;
+    public Area2D Detection
+    {
+        get => _area2D;
+    }
 
-    // public Vector2 HitBox
-    // {
-    //     get => _collisionShape2D.Position;
-    // }
     // Pre-calculate direction vectors to avoid recreation each frame
     private static readonly Dictionary<Direction, Vector2> _directionVectors = new()
     {
@@ -33,8 +34,7 @@ public partial class Enemy : CharacterBody2D
         base._Ready();
 
         spirte = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-        // _collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
-
+        _area2D = GetNode<Area2D>("Area2D");
         _timer = GetNode<Timer>("DirectionTimer");
         _timer.Timeout += PickRandomDirection;
         _timer.Start();
