@@ -3,7 +3,8 @@ using MyGame.Misc;
 
 public partial class Player : CharacterBody2D
 {
-    private const int SPEED = 128;
+    private Label _label;
+    private const int SPEED = 2;
 
     private Area2D _area2D;
     private CollisionShape2D _collisionShape2D;
@@ -28,7 +29,7 @@ public partial class Player : CharacterBody2D
 
     private bool _run = false;
 
-    private int _runCounter = 0;
+    private int _runCounter = 100;
 
     private AnimatedSprite2D spirte;
 
@@ -44,6 +45,8 @@ public partial class Player : CharacterBody2D
         spirte = GetNode<AnimatedSprite2D>("AnimatedCharacter2D");
         _area2D = GetNode<Area2D>("Area2D");
         _collisionShape2D = _area2D.GetNode<CollisionShape2D>("CollisionShape2D");
+        _label = GetNode<Label>("Label");
+        _label.Text = _runCounter + "";
     }
 
     private void Update()
@@ -110,6 +113,28 @@ public partial class Player : CharacterBody2D
     public override void _Process(double delta)
     {
         base._Process(delta);
+        if (Input.IsActionJustPressed("Run"))
+            _run = !_run;
+
+        if (_run)
+        {
+            _runCounter--;
+        }
+
+        if (_runCounter == 0)
+        {
+            _run = false;
+        }
+
+        if (!_run)
+        {
+            if (_runCounter >= 100)
+                _runCounter = 100;
+            else
+                _runCounter++;
+        }
+
+        _label.Text = _runCounter + "";
         Update();
     }
 
@@ -122,10 +147,10 @@ public partial class Player : CharacterBody2D
         if (Input.IsActionPressed("ui_right"))
         {
             _direction = Direction.Right;
-            if (Input.IsActionPressed("Run"))
+            if (_run)
             {
                 _state = State.Running;
-                direction.X = 3;
+                direction.X = 4;
             }
             else
             {
@@ -136,10 +161,10 @@ public partial class Player : CharacterBody2D
         else if (Input.IsActionPressed("ui_left"))
         {
             _direction = Direction.Left;
-            if (Input.IsActionPressed("Run"))
+            if (_run)
             {
                 _state = State.Running;
-                direction.X = -3;
+                direction.X = -4;
             }
             else
             {
@@ -150,9 +175,9 @@ public partial class Player : CharacterBody2D
         else if (Input.IsActionPressed("ui_down"))
         {
             _direction = Direction.Down;
-            if (Input.IsActionPressed("Run"))
+            if (_run)
             {
-                direction.Y = 3;
+                direction.Y = 4;
                 _state = State.Running;
             }
             else
@@ -164,10 +189,10 @@ public partial class Player : CharacterBody2D
         else if (Input.IsActionPressed("ui_up"))
         {
             _direction = Direction.Up;
-            if (Input.IsActionPressed("Run"))
+            if (_run)
             {
                 _state = State.Running;
-                direction.Y = -3;
+                direction.Y = -4;
             }
             else
             {
@@ -187,6 +212,6 @@ public partial class Player : CharacterBody2D
 
         Velocity = direction * SPEED;
         // GD.Print(Velocity);
-        MoveAndSlide();
+        MoveAndCollide(Velocity);
     }
 }

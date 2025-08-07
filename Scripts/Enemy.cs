@@ -4,7 +4,7 @@ using MyGame.Misc;
 
 public partial class Enemy : CharacterBody2D
 {
-    private const int SPEED = 150;
+    private const int SPEED = 3;
 
     private State _state = State.Idle;
     private Direction _direction = Direction.Down;
@@ -167,8 +167,8 @@ public partial class Enemy : CharacterBody2D
         {
             _state = State.Walk;
             Velocity = velocity * SPEED;
-            MoveAndSlide();
         }
+        MoveAndCollide(Velocity);
 
         // GD.Print(_state.ToString() + "\t" + _direction.ToString());
     }

@@ -844,3 +844,12 @@ frame_progress = 0.576433
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_3eeal")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -34.0
+offset_top = 17.0
+offset_right = 34.0
+offset_bottom = 40.0
+text = "Stamina:"
+horizontal_alignment = 1
+vertical_alignment = 1
