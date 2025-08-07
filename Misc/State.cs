@@ -1,4 +1,4 @@
-namespace Misc;
+namespace MyGame.Misc;
 
 public enum State
 {

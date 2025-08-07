@@ -836,7 +836,6 @@ shape = SubResource("RectangleShape2D_fvocf")
 debug_color = Color(0.854902, 0.670588, 0.964706, 0.294118)
 
 [node name="AnimatedCharacter2D" type="AnimatedSprite2D" parent="."]
-y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ds1xm")
 animation = &"right_attack"
 autoplay = "down_idle"

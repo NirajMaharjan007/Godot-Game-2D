@@ -332,7 +332,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jy6qf"]
 radius = 9.0
-height = 34.0
+height = 28.0
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_h0dic")
@@ -347,7 +347,6 @@ shape = SubResource("CircleShape2D_h0dic")
 debug_color = Color(0.668467, 0.322264, 0.982062, 0.42)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_s4ipr")
 animation = &"down_idle"
 autoplay = "down_idle"

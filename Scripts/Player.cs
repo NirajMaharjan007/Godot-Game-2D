@@ -1,5 +1,5 @@
 using Godot;
-using Misc;
+using MyGame.Misc;
 
 public partial class Player : CharacterBody2D
 {
