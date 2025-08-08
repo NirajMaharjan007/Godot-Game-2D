@@ -208,6 +208,7 @@ public partial class Player : CharacterBody2D
         {
             direction = Vector2.Zero;
             _state = State.Idle;
+            _run = false;
         }
 
         Velocity = direction * SPEED;

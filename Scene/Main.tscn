@@ -12,22 +12,20 @@ size = Vector2(1706, 44)
 size = Vector2(47, 964)
 
 [node name="Main" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_xhtwi")
 
 [node name="Grass" parent="." instance=ExtResource("2_g6ejq")]
 position = Vector2(383, 0)
 
-[node name="Object" type="Node2D" parent="."]
-y_sort_enabled = true
-
-[node name="Enemy" parent="Object" instance=ExtResource("3_h175a")]
+[node name="Enemy" parent="." instance=ExtResource("3_h175a")]
 position = Vector2(579, 342)
 up_direction = Vector2(0, 1)
 
-[node name="Player" parent="Object" instance=ExtResource("3_djkur")]
+[node name="Player" parent="." instance=ExtResource("3_djkur")]
 position = Vector2(600, 600)
 
-[node name="Camera2D" type="Camera2D" parent="Object/Player"]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 ignore_rotation = false
 limit_left = 0
 limit_top = 30
