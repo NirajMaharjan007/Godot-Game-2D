@@ -836,7 +836,7 @@ script = ExtResource("1_jvxg0")
 
 [node name="Area2D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="AttackBox" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(24, 0)
 shape = SubResource("RectangleShape2D_fvocf")
 debug_color = Color(0.854902, 0.670588, 0.964706, 0.294118)
@@ -847,7 +847,7 @@ animation = &"right_attack"
 autoplay = "down_idle"
 frame_progress = 0.576433
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="HitBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_3eeal")
 
@@ -876,5 +876,4 @@ theme_override_styles/background = SubResource("StyleBoxFlat_pmp2f")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fvocf")
 step = 1.0
 value = 100.0
-rounded = true
 show_percentage = false
