@@ -6,4 +6,5 @@ public enum State
     Running,
     Walk,
     Attacking,
+    Hurt,
 }
