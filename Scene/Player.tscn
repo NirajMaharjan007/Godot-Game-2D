@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=3 uid="uid://c1xxb1ejoo451"]
+[gd_scene load_steps=115 format=3 uid="uid://c1xxb1ejoo451"]
 
 [ext_resource type="Texture2D" uid="uid://qupkj6q65epo" path="res://assests/resources/Character/PNG/Orc1/Orc1_idle/orc1_idle_full.png" id="1_3eeal"]
 [ext_resource type="Texture2D" uid="uid://dplc4vfv4jcb6" path="res://assests/resources/Character/PNG/Orc1/Orc1_walk/orc1_walk_full.png" id="1_6l3be"]
@@ -824,6 +824,12 @@ animations = [{
 radius = 7.0
 height = 28.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pmp2f"]
+bg_color = Color(0.987493, 0, 0.258229, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fvocf"]
+bg_color = Color(0, 0.783637, 0.267034, 1)
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 up_direction = Vector2(0, 1)
 script = ExtResource("1_jvxg0")
@@ -850,6 +856,25 @@ offset_left = -34.0
 offset_top = 17.0
 offset_right = 34.0
 offset_bottom = 40.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
 text = "Stamina:"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Stamina" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -26.5
+offset_top = -34.0
+offset_right = 26.5
+offset_bottom = -28.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_pmp2f")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fvocf")
+step = 1.0
+value = 100.0
+rounded = true
+show_percentage = false

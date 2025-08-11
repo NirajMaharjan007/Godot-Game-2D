@@ -9,6 +9,8 @@ public partial class Player : CharacterBody2D
     private Area2D _area2D;
     private CollisionShape2D _collisionShape2D;
 
+    private ProgressBar _progressBar;
+
     /*  private bool _idle,
          _walk;
  
@@ -29,8 +31,6 @@ public partial class Player : CharacterBody2D
 
     private bool _run = false;
 
-    private int _runCounter = 100;
-
     private AnimatedSprite2D spirte;
 
     public Vector2 HitBox
@@ -42,11 +42,17 @@ public partial class Player : CharacterBody2D
     {
         base._Ready();
 
+        _progressBar = GetNode<ProgressBar>("Stamina");
+        _progressBar.Value = 100;
+        _progressBar.Hide();
+
         spirte = GetNode<AnimatedSprite2D>("AnimatedCharacter2D");
+
         _area2D = GetNode<Area2D>("Area2D");
         _collisionShape2D = _area2D.GetNode<CollisionShape2D>("CollisionShape2D");
+
         _label = GetNode<Label>("Label");
-        _label.Text = _runCounter + "";
+        _label.Text = _progressBar.ToString();
     }
 
     private void Update()
@@ -113,28 +119,35 @@ public partial class Player : CharacterBody2D
     public override void _Process(double delta)
     {
         base._Process(delta);
+        double stamina = _progressBar.Value;
+
         if (Input.IsActionJustPressed("Run"))
             _run = !_run;
 
         if (_run)
         {
-            _runCounter--;
+            stamina--;
+            _progressBar.Show();
         }
 
-        if (_runCounter == 0)
+        if (stamina == 0)
         {
             _run = false;
         }
 
         if (!_run)
         {
-            if (_runCounter >= 100)
-                _runCounter = 100;
+            if (stamina >= 100)
+            {
+                stamina = 100;
+                _progressBar.Hide();
+            }
             else
-                _runCounter++;
+                stamina++;
         }
 
-        _label.Text = _runCounter + "";
+        _progressBar.Value = stamina;
+        _label.Text = _progressBar.Value.ToString();
         Update();
     }
 
