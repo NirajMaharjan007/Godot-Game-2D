@@ -218,11 +218,20 @@ public partial class Enemy : CharacterBody2D
 
     private void PickRandomDirection()
     {
-        _idle = true;
-        _idleTimer.Start();
+        if (_hurt is false)
+        {
+            _idle = true;
+            _idleTimer.Start();
 
-        Direction[] directions = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
-        _direction = directions[GD.Randi() % directions.Length];
+            Direction[] directions =
+            [
+                Direction.Up,
+                Direction.Down,
+                Direction.Left,
+                Direction.Right,
+            ];
+            _direction = directions[GD.Randi() % directions.Length];
+        }
     }
 
     public override void _ExitTree()

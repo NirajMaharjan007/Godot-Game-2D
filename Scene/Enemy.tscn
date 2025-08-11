@@ -545,7 +545,7 @@ debug_color = Color(1, 0.50714, 0.109794, 0.42)
 sprite_frames = SubResource("SpriteFrames_s4ipr")
 animation = &"down_idle"
 autoplay = "down_idle"
-frame_progress = 0.360552
+frame_progress = 0.879287
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
