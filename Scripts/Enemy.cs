@@ -190,13 +190,15 @@ public partial class Enemy : CharacterBody2D
             Velocity = Vector2.Zero;
             _state = State.Idle;
         }
-        else if (_hurt)
+        if (_hurt)
+        {
             _state = State.Hurt;
-        // else
-        // {
-        //     _state = State.Walk;
-        //     Velocity = velocity * SPEED;
-        // }
+        }
+        else
+        {
+            _state = State.Walk;
+            Velocity = velocity * SPEED;
+        }
         MoveAndCollide(Velocity);
 
         // GD.Print(_state.ToString() + "\t" + _direction.ToString());

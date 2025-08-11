@@ -30,12 +30,19 @@ public partial class Player : CharacterBody2D
     private State _state = State.Idle;
     private Direction _direction = Direction.Down;
 
-    private bool _run = false;
+    private bool _run = false,
+        _attack = false;
 
     private AnimatedSprite2D spirte;
 
     public CollisionShape2D AttackBox => _attackBox;
     public CollisionShape2D HitBox => _hitbox;
+
+    public bool IsAttack
+    {
+        set => _attack = value;
+        get => _attack;
+    }
 
     public override void _Ready()
     {
@@ -124,6 +131,11 @@ public partial class Player : CharacterBody2D
 
         if (Input.IsActionJustPressed("Run"))
             _run = !_run;
+
+        if (Input.IsActionPressed("Attack"))
+            _attack = true;
+        else if (Input.IsActionJustReleased("Attack"))
+            _attack = false;
 
         if (_run)
         {
@@ -214,7 +226,7 @@ public partial class Player : CharacterBody2D
                 _state = State.Walk;
             }
         }
-        else if (Input.IsActionPressed("Attack"))
+        else if (_attack)
         {
             _state = State.Attacking;
         }

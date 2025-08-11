@@ -31,11 +31,12 @@ public partial class Main : Node2D
 
     private void CheckAttackBox()
     {
-        bool flag = _player.AttackBox.Shape.Collide(
-            _enemy.HitBox.GlobalTransform,
-            _enemy.HitBox.Shape,
-            _player.AttackBox.GlobalTransform
-        );
+        bool flag =
+            _player.AttackBox.Shape.Collide(
+                _player.AttackBox.GlobalTransform,
+                _enemy.HitBox.Shape,
+                _enemy.HitBox.GlobalTransform
+            ) && _player.IsAttack;
 
         GD.Print("Flag " + flag);
         _enemy.IsHurt = flag;
