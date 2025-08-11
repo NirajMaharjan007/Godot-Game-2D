@@ -15,15 +15,23 @@ public partial class Enemy : CharacterBody2D
     private Timer _timer,
         _idleTimer;
 
-    private bool _idle = false;
-    public Area2D Detection
-    {
-        get => _area2D;
-    }
+    private bool _idle = false,
+        _hurt = false;
 
-    public Direction CurrentDirection
+    private CollisionShape2D _attackBox,
+        _hitbox;
+    public Area2D Detection => _area2D;
+
+    public CollisionShape2D AttackBox => _attackBox;
+
+    public CollisionShape2D HitBox => _hitbox;
+
+    public Direction CurrentDirection => _direction;
+
+    public bool IsHurt
     {
-        get => _direction;
+        get => _hurt;
+        set => _hurt = value;
     }
 
     // Pre-calculate direction vectors to avoid recreation each frame
@@ -41,10 +49,14 @@ public partial class Enemy : CharacterBody2D
 
         spirte = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
+        _hitbox = GetNode<CollisionShape2D>("HitBox");
+
         _area2D = GetNode<Area2D>("Area2D");
         _area2D.BodyEntered += OnBodyEntered;
         _area2D.Monitorable = true;
         _area2D.Monitoring = true;
+
+        _attackBox = _area2D.GetNode<CollisionShape2D>("AttackBox");
 
         _timer = GetNode<Timer>("DirectionTimer");
         _timer.Timeout += PickRandomDirection;
@@ -63,13 +75,13 @@ public partial class Enemy : CharacterBody2D
 
     private void OnBodyEntered(Node2D body)
     {
-        GD.Print(
-            "Body Name -> "
-                + body.Name
-                + " ->"
-                + body.Name.ToString().Equals("Wall")
-                + body.Name.ToString().Equals("Wall2")
-        );
+        // GD.Print(
+        //     "Body Name -> "
+        //         + body.Name
+        //         + " ->"
+        //         + body.Name.ToString().Equals("Wall")
+        //         + body.Name.ToString().Equals("Wall2")
+        // );
 
         if (body.Name.ToString().Equals("Wall") || body.Name.ToString().Equals("Wall2"))
         {
@@ -79,7 +91,7 @@ public partial class Enemy : CharacterBody2D
             // Get opposite direction
             Direction oppositeDir = GetOppositeDirection(currentDir);
             _direction = oppositeDir;
-            GD.Print(_direction);
+            // GD.Print(_direction);
         }
     }
 
@@ -91,6 +103,8 @@ public partial class Enemy : CharacterBody2D
         switch (_direction)
         {
             case Direction.Down:
+                _attackBox.Position = new(0, 24);
+
                 if (_state.Equals(State.Idle))
                     anim = "down_idle";
                 else if (_state.Equals(State.Walk))
@@ -99,9 +113,13 @@ public partial class Enemy : CharacterBody2D
                     anim = "down_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "down_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "down_hurt";
                 break;
 
             case Direction.Up:
+                _attackBox.Position = new(0, -38);
+
                 if (_state.Equals(State.Idle))
                     anim = "up_idle";
                 else if (_state.Equals(State.Walk))
@@ -110,9 +128,13 @@ public partial class Enemy : CharacterBody2D
                     anim = "up_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "up_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "up_hurt";
                 break;
 
             case Direction.Left:
+                _attackBox.Position = new(-24, 0);
+
                 if (_state.Equals(State.Idle))
                     anim = "left_idle";
                 else if (_state.Equals(State.Walk))
@@ -121,9 +143,13 @@ public partial class Enemy : CharacterBody2D
                     anim = "left_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "left_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "left_hurt";
                 break;
 
             case Direction.Right:
+                _attackBox.Position = new(24, 0);
+
                 if (_state.Equals(State.Idle))
                     anim = "right_idle";
                 else if (_state.Equals(State.Walk))
@@ -132,9 +158,10 @@ public partial class Enemy : CharacterBody2D
                     anim = "right_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "right_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "right_hurt";
                 break;
         }
-        GD.Print("Enemy->" + _idle);
         spirte.Play(anim);
     }
 
@@ -163,11 +190,13 @@ public partial class Enemy : CharacterBody2D
             Velocity = Vector2.Zero;
             _state = State.Idle;
         }
-        else
-        {
-            _state = State.Walk;
-            Velocity = velocity * SPEED;
-        }
+        else if (_hurt)
+            _state = State.Hurt;
+        // else
+        // {
+        //     _state = State.Walk;
+        //     Velocity = velocity * SPEED;
+        // }
         MoveAndCollide(Velocity);
 
         // GD.Print(_state.ToString() + "\t" + _direction.ToString());

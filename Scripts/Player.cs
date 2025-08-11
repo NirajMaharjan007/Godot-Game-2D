@@ -7,7 +7,8 @@ public partial class Player : CharacterBody2D
     private const int SPEED = 2;
 
     private Area2D _area2D;
-    private CollisionShape2D _collisionShape2D;
+    private CollisionShape2D _attackBox,
+        _hitbox;
 
     private ProgressBar _progressBar;
 
@@ -33,10 +34,8 @@ public partial class Player : CharacterBody2D
 
     private AnimatedSprite2D spirte;
 
-    public Vector2 HitBox
-    {
-        get => _collisionShape2D.Position;
-    }
+    public CollisionShape2D AttackBox => _attackBox;
+    public CollisionShape2D HitBox => _hitbox;
 
     public override void _Ready()
     {
@@ -46,10 +45,12 @@ public partial class Player : CharacterBody2D
         _progressBar.Value = 100;
         _progressBar.Hide();
 
+        _hitbox = GetNode<CollisionShape2D>("HitBox");
+
         spirte = GetNode<AnimatedSprite2D>("AnimatedCharacter2D");
 
         _area2D = GetNode<Area2D>("Area2D");
-        _collisionShape2D = _area2D.GetNode<CollisionShape2D>("CollisionShape2D");
+        _attackBox = _area2D.GetNode<CollisionShape2D>("AttackBox");
 
         _label = GetNode<Label>("Label");
         _label.Text = _progressBar.ToString();
@@ -61,7 +62,7 @@ public partial class Player : CharacterBody2D
         switch (_direction)
         {
             case Direction.Down:
-                _collisionShape2D.Position = new(0, 24);
+                _attackBox.Position = new(0, 24);
 
                 if (_state.Equals(State.Idle))
                     anim = "down_idle";
@@ -74,7 +75,7 @@ public partial class Player : CharacterBody2D
                 break;
 
             case Direction.Up:
-                _collisionShape2D.Position = new(0, -32);
+                _attackBox.Position = new(0, -32);
 
                 if (_state.Equals(State.Idle))
                     anim = "up_idle";
@@ -87,7 +88,7 @@ public partial class Player : CharacterBody2D
                 break;
 
             case Direction.Left:
-                _collisionShape2D.Position = new(-24, 0);
+                _attackBox.Position = new(-24, 0);
 
                 if (_state.Equals(State.Idle))
                     anim = "left_idle";
@@ -100,7 +101,7 @@ public partial class Player : CharacterBody2D
                 break;
 
             case Direction.Right:
-                _collisionShape2D.Position = new(24, 0);
+                _attackBox.Position = new(24, 0);
 
                 if (_state.Equals(State.Idle))
                     anim = "right_idle";
