@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://qkeox2bt1ucm"]
+[gd_scene load_steps=75 format=3 uid="uid://qkeox2bt1ucm"]
 
 [ext_resource type="Script" uid="uid://b7id06b05tbl" path="res://Scripts/Enemy.cs" id="1_h0dic"]
 [ext_resource type="Texture2D" uid="uid://c3latvko1k1tp" path="res://assests/resources/Character/PNG/Orc3/orc3_idle/orc3_idle_full.png" id="1_nc1xg"]
@@ -524,6 +524,12 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jy6qf"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_le5ry"]
+bg_color = Color(0.615686, 0.172549, 0.243137, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6frff"]
+bg_color = Color(0.992157, 0.0470588, 0.0470588, 1)
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_h0dic")
 
@@ -550,3 +556,19 @@ frame_progress = 0.879287
 [node name="HitBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_jy6qf")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.5
+offset_top = -34.0
+offset_right = 25.5
+offset_bottom = -28.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_le5ry")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6frff")
+step = 1.0
+value = 100.0
+show_percentage = false
