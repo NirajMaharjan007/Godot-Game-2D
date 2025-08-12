@@ -31,7 +31,8 @@ public partial class Player : CharacterBody2D
     private Direction _direction = Direction.Down;
 
     private bool _run = false,
-        _attack = false;
+        _attack = false,
+        _hurt = false;
 
     private AnimatedSprite2D spirte;
 
@@ -42,6 +43,12 @@ public partial class Player : CharacterBody2D
     {
         set => _attack = value;
         get => _attack;
+    }
+
+    public bool IsHurt
+    {
+        set => _hurt = value;
+        get => _hurt;
     }
 
     public override void _Ready()
@@ -79,6 +86,8 @@ public partial class Player : CharacterBody2D
                     anim = "down_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "down_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "down_hurt";
                 break;
 
             case Direction.Up:
@@ -92,6 +101,8 @@ public partial class Player : CharacterBody2D
                     anim = "up_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "up_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "up_hurt";
                 break;
 
             case Direction.Left:
@@ -105,6 +116,8 @@ public partial class Player : CharacterBody2D
                     anim = "left_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "left_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "left_hurt";
                 break;
 
             case Direction.Right:
@@ -118,6 +131,8 @@ public partial class Player : CharacterBody2D
                     anim = "right_run";
                 else if (_state.Equals(State.Attacking))
                     anim = "right_attack";
+                else if (_state.Equals(State.Hurt))
+                    anim = "right_hurt";
                 break;
         }
         // GD.Print(anim);
@@ -227,9 +242,9 @@ public partial class Player : CharacterBody2D
             }
         }
         else if (_attack)
-        {
             _state = State.Attacking;
-        }
+        else if (_hurt)
+            _state = State.Hurt;
         else
         {
             direction = Vector2.Zero;
@@ -238,7 +253,7 @@ public partial class Player : CharacterBody2D
         }
 
         Velocity = direction * SPEED;
-        // GD.Print(Velocity);
+        GD.Print("Player Velocity ->" + Velocity);
         MoveAndCollide(Velocity);
     }
 }

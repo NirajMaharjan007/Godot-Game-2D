@@ -38,7 +38,14 @@ public partial class Main : Node2D
                 _enemy.HitBox.GlobalTransform
             ) && _player.IsAttack;
 
-        GD.Print("Flag " + flag);
         _enemy.IsHurt = flag;
+
+        bool collide = _enemy.AttackBox.Shape.Collide(
+            _enemy.AttackBox.GlobalTransform,
+            _player.HitBox.Shape,
+            _player.HitBox.GlobalTransform
+        );
+        _enemy.IsCollide = collide;
+        GD.Print("Collide " + collide);
     }
 }

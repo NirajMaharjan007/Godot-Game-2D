@@ -16,7 +16,9 @@ public partial class Enemy : CharacterBody2D
         _idleTimer;
 
     private bool _idle = false,
-        _hurt = false;
+        _hurt = false,
+        _attack = false,
+        _collide = false;
 
     private CollisionShape2D _attackBox,
         _hitbox;
@@ -32,6 +34,18 @@ public partial class Enemy : CharacterBody2D
     {
         get => _hurt;
         set => _hurt = value;
+    }
+
+    public bool IsIdle
+    {
+        get => _idle;
+        set => _idle = value;
+    }
+
+    public bool IsCollide
+    {
+        get => _collide;
+        set => _collide = value;
     }
 
     // Pre-calculate direction vectors to avoid recreation each frame
@@ -162,6 +176,7 @@ public partial class Enemy : CharacterBody2D
                     anim = "right_hurt";
                 break;
         }
+        GD.Print("Enemy Animate: " + anim);
         spirte.Play(anim);
     }
 
@@ -185,12 +200,12 @@ public partial class Enemy : CharacterBody2D
             else if (velocity.Y < 0)
                 _direction = Direction.Up;
         } */
-        if (_idle)
+        if (_idle || _collide)
         {
             Velocity = Vector2.Zero;
             _state = State.Idle;
         }
-        if (_hurt)
+        else if (_hurt)
         {
             _state = State.Hurt;
         }
@@ -199,9 +214,10 @@ public partial class Enemy : CharacterBody2D
             _state = State.Walk;
             Velocity = velocity * SPEED;
         }
+
         MoveAndCollide(Velocity);
 
-        // GD.Print(_state.ToString() + "\t" + _direction.ToString());
+        GD.Print(_state.ToString() + "\t Enemy IS Idle " + _idle + _collide);
     }
 
     private Direction GetOppositeDirection(Direction dir)
@@ -218,7 +234,7 @@ public partial class Enemy : CharacterBody2D
 
     private void PickRandomDirection()
     {
-        if (_hurt is false)
+        if (_hurt is false || _collide is false)
         {
             _idle = true;
             _idleTimer.Start();
