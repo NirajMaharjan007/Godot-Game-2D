@@ -1,15 +1,11 @@
-[gd_scene load_steps=75 format=3 uid="uid://qkeox2bt1ucm"]
+[gd_scene load_steps=74 format=3 uid="uid://qkeox2bt1ucm"]
 
 [ext_resource type="Script" uid="uid://b7id06b05tbl" path="res://Scripts/Enemy.cs" id="1_h0dic"]
 [ext_resource type="Texture2D" uid="uid://c3latvko1k1tp" path="res://assests/resources/Character/PNG/Orc3/orc3_idle/orc3_idle_full.png" id="1_nc1xg"]
 [ext_resource type="Texture2D" uid="uid://ceh72ac2nklu7" path="res://assests/resources/Character/PNG/Orc3/orc3_hurt/orc3_hurt_full.png" id="2_le5ry"]
 [ext_resource type="Texture2D" uid="uid://dc68wbj5pt7oc" path="res://assests/resources/Character/PNG/Orc3/orc3_walk/orc3_walk_full.png" id="3_jy6qf"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_h0dic"]
-radius = 144.003
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jy6qf"]
-size = Vector2(17, 22)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_adrja"]
 atlas = ExtResource("2_le5ry")
@@ -538,20 +534,19 @@ wait_time = 4.0
 
 [node name="Area2D" type="Area2D" parent="."]
 
-[node name="Detection" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_h0dic")
-debug_color = Color(0.668467, 0.322264, 0.982062, 0.42)
-
 [node name="AttackBox" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(0, 24)
+position = Vector2(0, 20)
 shape = SubResource("RectangleShape2D_jy6qf")
 debug_color = Color(1, 0.50714, 0.109794, 0.42)
+
+[node name="Detection" type="CollisionPolygon2D" parent="Area2D"]
+position = Vector2(0, 96)
+polygon = PackedVector2Array(-100, 140, 100, 140, 0, -100)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_s4ipr")
 animation = &"down_idle"
 autoplay = "down_idle"
-frame_progress = 0.879287
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
