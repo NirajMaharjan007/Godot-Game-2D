@@ -10,6 +10,8 @@ public partial class Enemy : CharacterBody2D
     private Direction _direction = Direction.Down;
 
     private Area2D _area2D;
+
+    private CollisionPolygon2D _detection;
     private AnimatedSprite2D spirte;
 
     private Timer _timer,
@@ -70,6 +72,7 @@ public partial class Enemy : CharacterBody2D
         _area2D.Monitorable = true;
         _area2D.Monitoring = true;
 
+        _detection = _area2D.GetNode<CollisionPolygon2D>("Detection");
         _attackBox = _area2D.GetNode<CollisionShape2D>("AttackBox");
 
         _timer = GetNode<Timer>("DirectionTimer");
@@ -117,6 +120,12 @@ public partial class Enemy : CharacterBody2D
         switch (_direction)
         {
             case Direction.Down:
+                _detection.Position = new(0, 96);
+                // vector.X = 0;
+                // vector.Y = 96;
+
+                _detection.RotationDegrees = 0.0f;
+
                 _attackBox.Position = new(0, 24);
 
                 if (_state.Equals(State.Idle))
@@ -132,7 +141,13 @@ public partial class Enemy : CharacterBody2D
                 break;
 
             case Direction.Up:
-                _attackBox.Position = new(0, -38);
+                _detection.Position = new(0, -96);
+                // vector.X = 0;
+                // vector.Y = -96;
+
+                _detection.RotationDegrees = 180.0f;
+
+                _attackBox.Position = new(0, -24);
 
                 if (_state.Equals(State.Idle))
                     anim = "up_idle";
@@ -147,6 +162,13 @@ public partial class Enemy : CharacterBody2D
                 break;
 
             case Direction.Left:
+                _detection.Position = new(-100, -12);
+
+                // vector.X = -100;
+                // vector.Y = -12;
+
+                _detection.RotationDegrees = 90.0f;
+
                 _attackBox.Position = new(-24, 0);
 
                 if (_state.Equals(State.Idle))
@@ -162,6 +184,13 @@ public partial class Enemy : CharacterBody2D
                 break;
 
             case Direction.Right:
+                _detection.Position = new(100, -12);
+
+                // vector.X = 100;
+                // vector.Y = -12;
+
+                _detection.RotationDegrees = -90.0f;
+
                 _attackBox.Position = new(24, 0);
 
                 if (_state.Equals(State.Idle))
@@ -177,6 +206,7 @@ public partial class Enemy : CharacterBody2D
                 break;
         }
         GD.Print("Enemy Animate: " + anim);
+
         spirte.Play(anim);
     }
 

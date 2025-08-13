@@ -76,7 +76,7 @@ public partial class Player : CharacterBody2D
         switch (_direction)
         {
             case Direction.Down:
-                _attackBox.Position = new(0, 24);
+                _attackBox.Position = new(0, 20);
 
                 if (_state.Equals(State.Idle))
                     anim = "down_idle";
@@ -91,7 +91,7 @@ public partial class Player : CharacterBody2D
                 break;
 
             case Direction.Up:
-                _attackBox.Position = new(0, -32);
+                _attackBox.Position = new(0, -20);
 
                 if (_state.Equals(State.Idle))
                     anim = "up_idle";
@@ -106,7 +106,7 @@ public partial class Player : CharacterBody2D
                 break;
 
             case Direction.Left:
-                _attackBox.Position = new(-24, 0);
+                _attackBox.Position = new(-20, 0);
 
                 if (_state.Equals(State.Idle))
                     anim = "left_idle";
@@ -121,7 +121,7 @@ public partial class Player : CharacterBody2D
                 break;
 
             case Direction.Right:
-                _attackBox.Position = new(24, 0);
+                _attackBox.Position = new(20, 0);
 
                 if (_state.Equals(State.Idle))
                     anim = "right_idle";
