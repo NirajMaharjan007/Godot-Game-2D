@@ -567,3 +567,5 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_6frff")
 step = 1.0
 value = 100.0
 show_percentage = false
+
+[node name="Pathfinder" type="NavigationAgent2D" parent="."]
