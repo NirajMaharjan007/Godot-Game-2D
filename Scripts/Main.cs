@@ -1,12 +1,10 @@
+using System;
 using Godot;
+
+namespace MyGame.Scripts;
 
 public partial class Main : Node2D
 {
-    /* private CollisionShape2D _northWall,
-        _eastWall,
-        _southWall,
-        _westWall; */
-
     private Player _player;
     private Enemy _enemy;
 
@@ -21,12 +19,12 @@ public partial class Main : Node2D
     public override void _Process(double delta)
     {
         base._Process(delta);
+        CheckAttackBox();
     }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
-        CheckAttackBox();
     }
 
     private void CheckAttackBox()

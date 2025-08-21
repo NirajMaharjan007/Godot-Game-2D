@@ -1,10 +1,12 @@
 using Godot;
 using MyGame.Misc;
 
+namespace MyGame.Scripts;
+
 public partial class Player : CharacterBody2D
 {
     private Label _label;
-    private const int SPEED = 2;
+    private const int Speed = 2;
 
     private Area2D _area2D;
     private CollisionShape2D _attackBox,
@@ -13,20 +15,20 @@ public partial class Player : CharacterBody2D
     private ProgressBar _progressBar;
 
     /*  private bool _idle,
-         _walk;
- 
-     public bool Idle
-     {
-         get => _idle;
-         set => _idle = value;
-     }
- 
-     public bool Walk
-     {
-         get => _walk;
-         set => _walk = value;
-     }
-  */
+     _walk;
+
+ public bool Idle
+ {
+     get => _idle;
+     set => _idle = value;
+ }
+
+ public bool Walk
+ {
+     get => _walk;
+     set => _walk = value;
+ }
+*/
     private State _state = State.Idle;
     private Direction _direction = Direction.Down;
 
@@ -34,7 +36,7 @@ public partial class Player : CharacterBody2D
         _attack = false,
         _hurt = false;
 
-    private AnimatedSprite2D spirte;
+    private AnimatedSprite2D _spirte;
 
     public CollisionShape2D AttackBox => _attackBox;
     public CollisionShape2D HitBox => _hitbox;
@@ -61,7 +63,7 @@ public partial class Player : CharacterBody2D
 
         _hitbox = GetNode<CollisionShape2D>("HitBox");
 
-        spirte = GetNode<AnimatedSprite2D>("AnimatedCharacter2D");
+        _spirte = GetNode<AnimatedSprite2D>("AnimatedCharacter2D");
 
         _area2D = GetNode<Area2D>("Area2D");
         _attackBox = _area2D.GetNode<CollisionShape2D>("AttackBox");
@@ -136,7 +138,7 @@ public partial class Player : CharacterBody2D
                 break;
         }
         // GD.Print(anim);
-        spirte.Play(anim);
+        _spirte.Play(anim);
     }
 
     public override void _Process(double delta)
@@ -252,7 +254,7 @@ public partial class Player : CharacterBody2D
             _run = false;
         }
 
-        Velocity = direction * SPEED;
+        Velocity = direction * Speed;
         GD.Print("Player Velocity ->" + Velocity);
         MoveAndCollide(Velocity);
     }

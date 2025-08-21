@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using Godot;
 using MyGame.Misc;
 
+namespace MyGame.Scripts;
+
 public partial class Enemy : CharacterBody2D
 {
-    private const int SPEED = 3;
+    public const int SPEED = 3;
 
     private State _state = State.Idle;
     private Direction _direction = Direction.Down;
@@ -12,7 +14,9 @@ public partial class Enemy : CharacterBody2D
     private Area2D _area2D;
 
     private CollisionPolygon2D _detection;
-    private AnimatedSprite2D spirte;
+    private AnimatedSprite2D _spirte;
+
+    private NavigationAgent2D _pathfinder;
 
     private Timer _timer,
         _idleTimer;
@@ -50,8 +54,10 @@ public partial class Enemy : CharacterBody2D
         set => _collide = value;
     }
 
+    public NavigationAgent2D Pathfinder => _pathfinder;
+
     // Pre-calculate direction vectors to avoid recreation each frame
-    private static readonly Dictionary<Direction, Vector2> _directionVectors = new()
+    private static readonly Dictionary<Direction, Vector2> DirectionVectors = new()
     {
         { Direction.Left, Vector2.Left },
         { Direction.Right, Vector2.Right },
@@ -63,7 +69,9 @@ public partial class Enemy : CharacterBody2D
     {
         base._Ready();
 
-        spirte = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        _pathfinder = GetNode<NavigationAgent2D>("Pathfinder");
+
+        _spirte = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
         _hitbox = GetNode<CollisionShape2D>("HitBox");
 
@@ -88,6 +96,21 @@ public partial class Enemy : CharacterBody2D
             PickRandomDirection();
             _idle = false;
         };
+    }
+
+    public void EntityPathFinder(CharacterBody2D target)
+    {
+        if (_pathfinder == null || target == null)
+            return;
+
+        // Set target position for navigation
+        _pathfinder.TargetPosition = target.GlobalPosition;
+    }
+
+    public void StopPathfinding()
+    {
+        _pathfinder.TargetPosition = GlobalPosition;
+        Velocity = Vector2.Zero;
     }
 
     private void OnBodyEntered(Node2D body)
@@ -207,14 +230,14 @@ public partial class Enemy : CharacterBody2D
         }
         GD.Print("Enemy Animate: " + anim);
 
-        spirte.Play(anim);
+        _spirte.Play(anim);
     }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
 
-        Vector2 velocity = _directionVectors.GetValueOrDefault(_direction, Vector2.Zero);
+        Vector2 velocity = DirectionVectors.GetValueOrDefault(_direction, Vector2.Zero);
 
         /* if (velocity.IsZeroApprox())
             _state = State.Idle;
