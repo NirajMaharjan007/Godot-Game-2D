@@ -54,6 +54,7 @@ public partial class Enemy : CharacterBody2D
         set => _collide = value;
     }
 
+    public bool IsDetectedPlayer { set; get; }
     public NavigationAgent2D Pathfinder => _pathfinder;
 
     // Pre-calculate direction vectors to avoid recreation each frame
@@ -77,6 +78,7 @@ public partial class Enemy : CharacterBody2D
 
         _area2D = GetNode<Area2D>("Area2D");
         _area2D.BodyEntered += OnBodyEntered;
+        _area2D.BodyExited += OnBodyExited;
         _area2D.Monitorable = true;
         _area2D.Monitoring = true;
 
@@ -98,30 +100,17 @@ public partial class Enemy : CharacterBody2D
         };
     }
 
-    public void EntityPathFinder(CharacterBody2D target)
+    private void OnBodyExited(Node2D body)
     {
-        if (_pathfinder == null || target == null)
-            return;
-
-        // Set target position for navigation
-        _pathfinder.TargetPosition = target.GlobalPosition;
-    }
-
-    public void StopPathfinding()
-    {
-        _pathfinder.TargetPosition = GlobalPosition;
-        Velocity = Vector2.Zero;
+        if (body.Name.ToString().Equals("Player"))
+        {
+            IsDetectedPlayer = false;
+        }
     }
 
     private void OnBodyEntered(Node2D body)
     {
-        // GD.Print(
-        //     "Body Name -> "
-        //         + body.Name
-        //         + " ->"
-        //         + body.Name.ToString().Equals("Wall")
-        //         + body.Name.ToString().Equals("Wall2")
-        // );
+        GD.Print("Body Name -> " + body.Name);
 
         if (body.Name.ToString().Equals("Wall") || body.Name.ToString().Equals("Wall2"))
         {
@@ -132,6 +121,11 @@ public partial class Enemy : CharacterBody2D
             Direction oppositeDir = GetOppositeDirection(currentDir);
             _direction = oppositeDir;
             // GD.Print(_direction);
+        }
+        if (body.Name.ToString().Equals("Player"))
+        {
+            GD.Print("Flag Player-> " + body.Name);
+            IsDetectedPlayer = true;
         }
     }
 
@@ -229,6 +223,7 @@ public partial class Enemy : CharacterBody2D
                 break;
         }
         GD.Print("Enemy Animate: " + anim);
+        GD.Print("Enemy Detect Entity: " + IsDetectedPlayer);
 
         _spirte.Play(anim);
     }
@@ -258,7 +253,7 @@ public partial class Enemy : CharacterBody2D
             Velocity = Vector2.Zero;
             _state = State.Idle;
         }
-        else if (_hurt)
+        if (_hurt)
         {
             _state = State.Hurt;
         }
@@ -308,6 +303,7 @@ public partial class Enemy : CharacterBody2D
         if (_area2D != null)
         {
             _area2D.BodyEntered -= OnBodyEntered;
+            _area2D.BodyExited -= OnBodyExited;
         }
         if (_timer != null)
         {
