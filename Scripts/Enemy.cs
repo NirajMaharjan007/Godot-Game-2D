@@ -253,12 +253,14 @@ public partial class Enemy : CharacterBody2D
             Velocity = Vector2.Zero;
             _state = State.Idle;
         }
-        if (_hurt)
+        else if (_hurt)
         {
             _state = State.Hurt;
+            Velocity = Vector2.Zero;
         }
         else
         {
+            _idle = false;
             _state = State.Walk;
             Velocity = velocity * SPEED;
         }
