@@ -549,7 +549,7 @@ animation = &"down_idle"
 autoplay = "down_idle"
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
-position = Vector2(0, -7)
+position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_jy6qf")
 
 [node name="HealthBar" type="ProgressBar" parent="."]

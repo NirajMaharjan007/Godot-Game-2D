@@ -255,7 +255,7 @@ public partial class Player : CharacterBody2D
         }
 
         Velocity = direction * Speed;
-        GD.Print("Player Velocity ->" + Velocity);
+        // GD.Print("Player Velocity ->" + Velocity);
         MoveAndCollide(Velocity);
     }
 }

@@ -110,7 +110,7 @@ public partial class Enemy : CharacterBody2D
 
     private void OnBodyEntered(Node2D body)
     {
-        GD.Print("Body Name -> " + body.Name);
+        // GD.Print("Body Name -> " + body.Name);
 
         if (body.Name.ToString().Equals("Wall") || body.Name.ToString().Equals("Wall2"))
         {
@@ -124,7 +124,7 @@ public partial class Enemy : CharacterBody2D
         }
         if (body.Name.ToString().Equals("Player"))
         {
-            GD.Print("Flag Player-> " + body.Name);
+            // GD.Print("Flag Player-> " + body.Name);
             IsDetectedPlayer = true;
         }
     }
@@ -134,6 +134,7 @@ public partial class Enemy : CharacterBody2D
         base._Process(delta);
 
         string anim = "";
+
         switch (_direction)
         {
             case Direction.Down:
@@ -147,13 +148,13 @@ public partial class Enemy : CharacterBody2D
 
                 if (_state.Equals(State.Idle))
                     anim = "down_idle";
-                else if (_state.Equals(State.Walk))
+                if (_state.Equals(State.Walk))
                     anim = "down_walk";
-                else if (_state.Equals(State.Running))
+                if (_state.Equals(State.Running))
                     anim = "down_run";
-                else if (_state.Equals(State.Attacking))
+                if (_state.Equals(State.Attacking))
                     anim = "down_attack";
-                else if (_state.Equals(State.Hurt))
+                if (_state.Equals(State.Hurt))
                     anim = "down_hurt";
                 break;
 
@@ -168,13 +169,13 @@ public partial class Enemy : CharacterBody2D
 
                 if (_state.Equals(State.Idle))
                     anim = "up_idle";
-                else if (_state.Equals(State.Walk))
+                if (_state.Equals(State.Walk))
                     anim = "up_walk";
-                else if (_state.Equals(State.Running))
+                if (_state.Equals(State.Running))
                     anim = "up_run";
-                else if (_state.Equals(State.Attacking))
+                if (_state.Equals(State.Attacking))
                     anim = "up_attack";
-                else if (_state.Equals(State.Hurt))
+                if (_state.Equals(State.Hurt))
                     anim = "up_hurt";
                 break;
 
@@ -190,13 +191,13 @@ public partial class Enemy : CharacterBody2D
 
                 if (_state.Equals(State.Idle))
                     anim = "left_idle";
-                else if (_state.Equals(State.Walk))
+                if (_state.Equals(State.Walk))
                     anim = "left_walk";
-                else if (_state.Equals(State.Running))
+                if (_state.Equals(State.Running))
                     anim = "left_run";
-                else if (_state.Equals(State.Attacking))
+                if (_state.Equals(State.Attacking))
                     anim = "left_attack";
-                else if (_state.Equals(State.Hurt))
+                if (_state.Equals(State.Hurt))
                     anim = "left_hurt";
                 break;
 
@@ -212,18 +213,18 @@ public partial class Enemy : CharacterBody2D
 
                 if (_state.Equals(State.Idle))
                     anim = "right_idle";
-                else if (_state.Equals(State.Walk))
+                if (_state.Equals(State.Walk))
                     anim = "right_walk";
-                else if (_state.Equals(State.Running))
+                if (_state.Equals(State.Running))
                     anim = "right_run";
-                else if (_state.Equals(State.Attacking))
+                if (_state.Equals(State.Attacking))
                     anim = "right_attack";
-                else if (_state.Equals(State.Hurt))
+                if (_state.Equals(State.Hurt))
                     anim = "right_hurt";
                 break;
         }
         GD.Print("Enemy Animate: " + anim);
-        GD.Print("Enemy Detect Entity: " + IsDetectedPlayer);
+        // GD.Print("Enemy Detect Entity: " + IsDetectedPlayer);
 
         _spirte.Play(anim);
     }
@@ -248,26 +249,29 @@ public partial class Enemy : CharacterBody2D
             else if (velocity.Y < 0)
                 _direction = Direction.Up;
         } */
-        if (_idle || _collide)
+        if (_idle)
         {
             Velocity = Vector2.Zero;
             _state = State.Idle;
         }
-        else if (_hurt)
+        if (_hurt)
         {
             _state = State.Hurt;
             Velocity = Vector2.Zero;
+        }
+        if (_collide)
+        {
+            _idle = _collide;
         }
         else
         {
             _idle = false;
             _state = State.Walk;
             Velocity = velocity * SPEED;
+            MoveAndCollide(Velocity);
         }
 
-        MoveAndCollide(Velocity);
-
-        GD.Print(_state.ToString() + "\t Enemy IS Idle " + _idle + _collide);
+        // GD.Print(_state.ToString() + "\t Enemy IS Idle " + _idle + _collide);
     }
 
     private Direction GetOppositeDirection(Direction dir)
@@ -284,7 +288,7 @@ public partial class Enemy : CharacterBody2D
 
     private void PickRandomDirection()
     {
-        if (_hurt is false || _collide is false)
+        if (_collide is false)
         {
             _idle = true;
             _idleTimer.Start();

@@ -19,12 +19,12 @@ public partial class Main : Node2D
     public override void _Process(double delta)
     {
         base._Process(delta);
-        CheckAttackBox();
     }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
+        CheckAttackBox();
     }
 
     private void CheckAttackBox()
@@ -44,6 +44,6 @@ public partial class Main : Node2D
             _player.HitBox.GlobalTransform
         );
         _enemy.IsCollide = collide;
-        GD.Print("Collide " + collide);
+        GD.Print("Collide and Hurt " + collide + "\t" + flag);
     }
 }
